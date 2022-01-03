@@ -1,46 +1,24 @@
 #!/bin/bash 
-##SBATCH --qos=priority
-##SBATCH --partition=priority
-##SBATCH --job-name=sd_1km
-###SBATCH --ntasks-per-node=1 
-##SBATCH --ntasks=1 
-##SBATCH --cpus-per-task=1
-##SBATCH --mem=60000
-##SBATCH --output=%j.out 
-##SBATCH --account=gvca
+
 #=============================================
 #code to prepare the obs_hist,sim_hist,sim_fut
 # and cut the domain for the Target
 #=============================================
-set -ex
-#========= NAMELIST ==========================
-lat0=38. # south lat
-lat1=40. # north lat 
-lon0=68. # west lon
-lon1=70. # east lon
-header="chelsa-w5e5v1.0_obsclim_"
-suffix="_30arcsec_global_daily_"
-chelsa_dir="/p/projects/proclias/1km/data/chelsa_w5e5/nc/"
-out_dir="/p/projects/gvca/bijan/1km_out_new/"
-isimip3b_dir="/p/projects/isimip/isimip/ISIMIP3b/InputData/climate/atmosphere/bias-adjusted/global/daily/"
-#isimip3b_dir_2nd="/p/projects/isimip/isimip/ISIMIP3b/SecondaryInputData/climate/atmosphere/bias-adjusted/global/daily/"
+set -e
+source namelist.txt
+echo "variables are "${variables[@]}
 
-# declare the variables:
-scenarios=(historical ssp126 ssp370 ssp585)
-models=(GFDL-ESM4  IPSL-CM6A-LR  MPI-ESM1-2-HR  MRI-ESM2-0  UKESM1-0-LL)
-#models_2nd=(CanESM5  CNRM-CM6-1  CNRM-ESM2-1  EC-Earth3  MIROC6)
-#variables=(pr rsds tas tasmax tasmin)
-variable="tas"
-#========== END NAMELIST ======================
 
+###################
 cutoff_do="yes"
 mkdir -p ${out_dir}
 if [ "${cutoff_do}"  == "yes" ]
 then 
-# cutoff the region for chelsa
-for var in $variable #######"${variables[@]}"
+
+for var in "${variables[@]}"
 do 
     echo "The variable is "$var
+    # cutoff the region for chelsa
     for year in {1979..2016}
     do 
         echo "The year is "$year
@@ -52,7 +30,7 @@ do
         done
     done
 
-
+    # cutoff the region for scenarios
     for scen in "${scenarios[@]}"
     do 
     for mod in "${models[@]}"
@@ -60,7 +38,7 @@ do
             if [ "$scen" == "historical" ]
             then 
 
-                for yy in 1971_1980 1981_1990 1991_2000 2001_2010 2011_2014
+                for yy in 1850_1850 1851_1860 1861_1870 1871_1880 1881_1890 1891_1900 1901_1910 1911_1920 1921_1930 1931_1940 1941_1950 1951_1960 1961_1970 1971_1980 1981_1990 1991_2000 2001_2010 2011_2014
                 do 
 
                     echo 
@@ -83,7 +61,7 @@ do
 
                     echo 
                     echo "----------cuttiung the scenarios---------------"
-                    echo "scenario is"$scen "and model i "$mod  
+                    echo "scenario is"$scen "and model "$mod  "for year " $yy
                     echo 
                     mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
                     if [ "$mod_lower" == "ukesm1-0-ll" ]
@@ -118,7 +96,7 @@ if [ "${merging_do}"  == "yes" ]
 then 
 ## merge single data to a complete data: 
 ## observations
-for var in $variable ####"${variables[@]}"
+for var in "${variables[@]}"
 do 
 #    if [ ! -f ${out_dir}/merged/${header}${var}${suffix}_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]
 #    then 
@@ -130,7 +108,7 @@ done
 #
 ## models
 
-for var in $variable ####"${variables[@]}"
+for var in "${variables[@]}"
 do 
     for scen in "${scenarios[@]}"
     do 
