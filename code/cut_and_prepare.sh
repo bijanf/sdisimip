@@ -10,7 +10,7 @@ echo "variables are "${variables[@]}
 
 
 ###################
-cutoff_do="yes"
+cutoff_do="no"
 mkdir -p ${out_dir}
 if [ "${cutoff_do}"  == "yes" ]
 then 
@@ -61,7 +61,7 @@ do
 
                     echo 
                     echo "----------cuttiung the scenarios---------------"
-                    echo "scenario is"$scen "and model "$mod  "for year " $yy
+                    echo "scenario is "$scen "and model is "$mod  "for year " $yy
                     echo 
                     mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
                     if [ "$mod_lower" == "ukesm1-0-ll" ]
@@ -87,8 +87,6 @@ do
     done
 done
 fi
-
-
 
 echo "merging..................."
 merging_do="yes"
@@ -137,4 +135,4 @@ fi
 
 mkdir -p ${out_dir}/merged
 mv ${out_dir}/*mergetime.nc ${out_dir}/merged/
-rm ${out_dir}/*mergetime.nc
+rm ${out_dir}/*.nc
