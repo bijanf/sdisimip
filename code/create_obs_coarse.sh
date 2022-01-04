@@ -1,6 +1,9 @@
 #!/bin/bash 
 set -ex
 source namelist.txt
+
+latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
+
 ####################################################
 # create the out_dir if not exist:
 mkdir -p ${out_dir}

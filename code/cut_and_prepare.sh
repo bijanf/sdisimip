@@ -5,6 +5,7 @@
 #=============================================
 set -e
 source namelist.txt
+latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 echo "variables are "${variables[@]}
 ###################
 cutoff_do="no"

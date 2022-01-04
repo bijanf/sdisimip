@@ -6,8 +6,7 @@ lat0=44.5 # south lat
 lat1=46.5 # north lat 
 lon0=5. # west lon
 lon1=7. # east lon
-# change the following accordingly #TODO: make it automatically
-latlon="lat44.5_46.5_lon5._7."
+
 # header of the chelsa
 header="chelsa-w5e5v1.0_obsclim_"
 # suffix: 
