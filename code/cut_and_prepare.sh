@@ -1,5 +1,4 @@
 #!/bin/bash 
-
 #=============================================
 #code to prepare the obs_hist,sim_hist,sim_fut
 # and cut the domain for the Target
@@ -7,11 +6,9 @@
 set -e
 source namelist.txt
 echo "variables are "${variables[@]}
-
-
 ###################
 cutoff_do="no"
-mkdir -p ${out_dir}
+mkdir -p ${out_dir_intermediate}
 if [ "${cutoff_do}"  == "yes" ]
 then 
 
@@ -25,7 +22,7 @@ do
         for mon in {01..12}
         do 
             echo "The month is "$mon
-            ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
+            ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir_intermediate}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
 
         done
     done
@@ -52,7 +49,7 @@ do
                     else
                        realization="r1i1p1f1"
                     fi  
-                    ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${isimip3b_dir}${scen}/${mod}/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}.nc ${out_dir}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc 
+                    ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${isimip3b_dir}${scen}/${mod}/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc 
 
                 done
             else
@@ -71,7 +68,7 @@ do
                         realization="r1i1p1f1"
                     fi  
 
-                    ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${isimip3b_dir}${scen}/${mod}/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}.nc ${out_dir}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc 
+                    ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${isimip3b_dir}${scen}/${mod}/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_${yy}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc 
 
 
                 
@@ -96,10 +93,10 @@ then
 ## observations
 for var in "${variables[@]}"
 do 
-#    if [ ! -f ${out_dir}/merged/${header}${var}${suffix}_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]
+#    if [ ! -f ${out_dir_intermediate}/merged/${header}${var}${suffix}_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]
 #    then 
 
-        cdo -O -mergetime ${out_dir}${header}${var}${suffix}*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc 
+        cdo -O -mergetime ${out_dir_intermediate}${header}${var}${suffix}*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc 
 #    fi
 
 done 
@@ -119,10 +116,10 @@ do
             else
                 realization="r1i1p1f1"
             fi  
-#            if [ ! -f ${out_dir}/merged/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]    
+#            if [ ! -f ${out_dir_intermediate}/merged/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]    
 #            then 
 
-                cdo -O -mergetime   ${out_dir}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
+                cdo -O -mergetime   ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
 #            fi
 
         done
@@ -133,6 +130,6 @@ do
 done 
 fi
 
-mkdir -p ${out_dir}/merged
-mv ${out_dir}/*mergetime.nc ${out_dir}/merged/
-rm ${out_dir}/*.nc
+mkdir -p ${out_dir_intermediate}/merged
+mv ${out_dir_intermediate}/*mergetime.nc ${out_dir_intermediate}/merged/
+rm ${out_dir_intermediate}/*.nc

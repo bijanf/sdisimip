@@ -1,17 +1,65 @@
+# This is the namelist for cutting and preparing the netcdf files for bias adjustment and 
+# statistical downscaling 
+##########################################################################################
+
 lat0=44.5 # south lat
 lat1=46.5 # north lat 
 lon0=5. # west lon
 lon1=7. # east lon
+# change the following accordingly #TODO: make it automatically
+latlon="lat44.5_46.5_lon5._7."
+# header of the chelsa
 header="chelsa-w5e5v1.0_obsclim_"
+# suffix: 
 suffix="_30arcsec_global_daily_"
+# where the chelsa is:
 chelsa_dir="/p/projects/proclias/1km/data/chelsa_w5e5/nc/"
-out_dir="/p/projects/gvca/bijan/Mats/data/"
+# where to write the files
+out_dir_intermediate="/p/projects/gvca/bijan/Mats/data/"
+# path to ISIMIP3b data:
 isimip3b_dir="/p/projects/isimip/isimip/ISIMIP3b/InputData/climate/atmosphere/bias-adjusted/global/daily/"
-#isimip3b_dir_2nd="/p/projects/isimip/isimip/ISIMIP3b/SecondaryInputData/climate/atmosphere/bias-adjusted/global/daily/"
-
 # declare the variables:
-scenarios=(historical ssp126 ssp370 ssp585)
+scenarios=(historical ssp126 ssp370 ssp585) # all scenarios
+scenarios_future=(ssp126 ssp370 ssp585) # future scenarios   
 models=(GFDL-ESM4  IPSL-CM6A-LR  MPI-ESM1-2-HR  MRI-ESM2-0  UKESM1-0-LL)
-#models_2nd=(CanESM5  CNRM-CM6-1  CNRM-ESM2-1  EC-Earth3  MIROC6)
 variables=(pr rsds tas tasmax tasmin)
+member=3 # just for labeling the ensemble-members if needed
+# the following comes from the "ncdump -c " of a sample output of "cut_and_prepare.sh"
+# keep in mind that the original ISIMIP3b data has the following grid structure: 
+######################################################
+#############            gridtype  = lonlat
+#############            gridsize  = 259200
+#############            xsize     = 720
+#############            ysize     = 360
+#############            xname     = lon
+#############            xlongname = "longitude"
+#############            xunits    = "degrees_east"
+#############            yname     = lat
+#############            ylongname = "latitude"
+#############            yunits    = "degrees_north"
+#############            xfirst    = -179.75
+#############            xinc      = 0.5
+#############            yfirst    = 89.75
+#############            yinc      = -0.5
+######################################################
 
+lat11=44.75
+lat22=46.25
+lon11=5.25
+lon22=6.75
+
+data_dir="/p/projects/gvca/bijan/Mats/data/merged/"
+out_dir="/p/projects/gvca/bijan/Mats/data/out/"
+
+
+####################################
+## do not change the following lines
+year1obs=1979
+year2obs=2014
+res0=0.5
+res1=0.21428571428571427
+res2=0.1
+res3=0.04838709677419355
+res4=0.023809523809523808
+res5=0.011811023622047244
+#####################################
