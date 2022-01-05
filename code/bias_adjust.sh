@@ -19,13 +19,13 @@ lon1=7. # east lon
 out_dir="/p/projects/gvca/bijan/Mats/data/out/"
 var=$1
 scenario=$2
-model=$3
+mod=$3
 time_slice=$4
 ###################################################################
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 mkdir -p ${out_dir}GCMoutput_coarse
-mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
-if [ "$mod_lower" == "ukesm1-0-ll" ]
+model=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
+if [ "$model" == "ukesm1-0-ll" ]
 then 
     realization="r1i1p1f2"
 else
