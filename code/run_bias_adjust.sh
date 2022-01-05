@@ -16,7 +16,7 @@ do
                 echo "sending the job to slurm !"
                 sbatch bias_adjust.sh $var $scenario $model $time_slice 
                 echo "waiting 3 minutes to send the next job! "
-                sleep 300
+                sleep 180
             done 
         done
     done
