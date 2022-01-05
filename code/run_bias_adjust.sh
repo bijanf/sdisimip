@@ -1,32 +1,32 @@
 #!bin/bash 
 set -e
-for var in pr rsds tas tasmax tasmin
+#for var in pr rsds tas tasmax tasmin
+for var in rsds tas tasmax tasmin
 do 
-    echo "Variable is "$var 
-    echo " "
-    echo " "
+
     for scenario in ssp126 ssp370 ssp585
     do 
-        echo "  scenario is "$scenario
-        echo " "
-        echo " "
+
         for mod in GFDL-ESM4  IPSL-CM6A-LR  MPI-ESM1-2-HR  MRI-ESM2-0  UKESM1-0-LL
         do 
-            echo "------------------------"
-            echo "    model is "$mod
-            echo "------------------------"
-
             model=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
             for time_slice in historical near_future middle_future far_future
             do 
-                echo "      time_slice is "$time_slice
-                echo "         sending the job to slurm !"
+                echo "    time_slice is--------- "$time_slice
+                echo 
+                echo "    model is-------------- "$mod
+                echo 
+                echo "    scenario is----------- "$scenario
+                echo 
+                echo "    variable is----------- "$var 
+                echo 
+                echo "sending the job to slurm !"
                 sbatch bias_adjust.sh $var $scenario $model $time_slice 
-                echo "            waiting 3 minutes to send the next job! "
+                echo "waiting 15 seconds to send the next job! "
                 echo "-----------------------------------------------------"
                 echo " "
                 echo " "
-                sleep 180
+                sleep 15
             done 
         done
     done
