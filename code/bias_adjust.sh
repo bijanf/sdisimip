@@ -1,10 +1,10 @@
 #!/bin/bash 
 #SBATCH --qos=short
 #SBATCH --partition=standard
-#SBATCH --job-name=ba_1km
+#SBATCH --job-name=member4
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=16
-#SBATCH --output=../data/%j.out 
+#SBATCH --output=../../data/%j.out 
 #SBATCH --account=gvca
 #SBATCH --mail-type=FAIL                                                                     
 #SBATCH --mail-user=fallah
@@ -17,7 +17,8 @@ lat1=46.5 # north lat
 lon0=5. # west lon
 lon1=7. # east lon
 ##time_slice="historical"
-out_dir="/p/projects/gvca/bijan/Mats/data/out/"
+#out_dir="/p/projects/gvca/bijan/Mats/data/out/"
+out_dir="/p/projects/gvca/bijan/Samarkhand/out/"
 var=$1
 scenario=$2
 mod=$3
@@ -62,7 +63,7 @@ fi
 # tasrange = tasmax − tasmin and tasskew = (tas − tasmin)/(tasmax − tasmin)
 # ------------------ obs -------------------: 
 # tasrang: 
-if [ $var == "tasrange" ] && [ $scenario == "ssp126"] && [ $mod == "gfdl-esm4"] && [ $time_slice == "historical"]
+if [ $var == "tasrange" ] && [ $scenario == "ssp126" ] && [ $mod == "gfdl-esm4" ] && [ $time_slice == "historical" ]
 then 
 
 for resel in $res0 $res1 $res2 $res3 $res4 $res5 
