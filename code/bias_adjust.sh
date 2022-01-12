@@ -12,10 +12,7 @@ source namelist.txt
 set -ex
 member=3
 res="0.5"
-lat0=44.5 # south lat
-lat1=46.5 # north lat 
-lon0=5. # west lon
-lon1=7. # east lon
+
 ##time_slice="historical"
 #out_dir="/p/projects/gvca/bijan/Mats/data/out/"
 out_dir="/p/projects/gvca/bijan/Samarkhand/out/"
