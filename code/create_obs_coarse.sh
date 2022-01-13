@@ -14,7 +14,7 @@ do
     mkdir -p ${out_dir}OBSinput_coarse
     #####################
     # create the grid information for remapping from a model  
-    cdo -O griddes ../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
+    cdo -O griddes ../../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
     #cdo -O griddes ${out_dir}GCMinput_coarse/gfdl-esm4_r1i1p1f1_w5e5_ssp585_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
 
 
@@ -120,7 +120,7 @@ do
 
             # create the grid information for remapping 
             
-            cdo -O griddes ../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
+            cdo -O griddes ../../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
 
             #cdo -O griddes ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
 

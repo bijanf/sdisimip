@@ -72,21 +72,21 @@ cdo -O sub ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasmax_30arcsec_glo
 fi 
 
 # tasskew 
-if [ $var == "tasskew" ] 
-then 
+#if [ $var == "tasskew" ] 
+#then 
 
-if [ ! -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ]; then
+if [ ! -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ]; then
 
-cdo -O sub ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tas_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasmin_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc 
+cdo -O sub ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tas_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasmin_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc 
 else 
 echo "error, the tas_interim exists!"
 exit 1
 fi 
 
-cdo -O div tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasrange_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasskew_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc
+cdo -O div tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasrange_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasskew_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc
 
-rm -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc
-fi 
+rm -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc
+##fi 
 done
 fi 
 
@@ -96,20 +96,20 @@ if [ $var == "tasrange" ]
 then 
 cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmax_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_train.nc 
 fi 
-if [ $var == "tasskew" ] 
-then 
+#if [ $var == "tasskew" ] 
+#then 
 
-if [ ! -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ]; then
-cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tas_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_train.nc tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc
+if [ ! -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ]; then
+cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tas_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_train.nc tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc
 else 
 echo "error, the tas_interim exists!"
 exit 1
 fi 
 
-cdo -O div tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasskew_global_daily_cut_mergetime_member${member}_train.nc
+cdo -O div tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasskew_global_daily_cut_mergetime_member${member}_train.nc
 
-rm -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc 
-fi 
+rm -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc 
+###fi 
 
 # time_slice:
 if [ $var == "tasrange" ] 
@@ -117,18 +117,18 @@ then
 cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmax_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_${time_slice}.nc 
 fi 
 
-if [ $var == "tasskew" ] 
-then 
-if [ ! -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ]; then
-cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tas_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_${time_slice}.nc tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc 
+#if [ $var == "tasskew" ] 
+#then 
+if [ ! -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ]; then
+cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tas_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_${time_slice}.nc tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc 
 else 
 echo "error, the tas_interim exists!"
 exit 1
 fi 
-cdo -O div tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasskew_global_daily_cut_mergetime_member${member}_${time_slice}.nc 
+cdo -O div tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasskew_global_daily_cut_mergetime_member${member}_${time_slice}.nc 
 
-rm -f tas_interim_${resel}_${var}_${scenario}_${mod}_${time_slice}.nc 
-fi 
+rm -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc 
+##fi 
 
 
 ###############
