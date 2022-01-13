@@ -1,7 +1,7 @@
 #!bin/bash 
 set -e
 
-for var in "tasrange" #"tasskew" "rsds" "tas" "pr"
+for var in "tasrange" "tasskew" "rsds" "tas" "pr"
 do 
 
     for scenario in "ssp126" "ssp370" "ssp585"
