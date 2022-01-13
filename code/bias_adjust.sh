@@ -1,8 +1,10 @@
 #!/bin/bash 
-##SBATCH --qos=short
-#SBATCH --qos=priority
+#SBATCH --qos=short
+##SBATCH --qos=largemem
+##SBATCH --qos=priority
 ##SBATCH --partition=standard
-#SBATCH --partition=priority
+##SBATCH --partition=priority
+#SBATCH --partition=largemem
 #SBATCH --job-name=member3
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=16
@@ -11,7 +13,7 @@
 #SBATCH --mail-type=FAIL                                                                     
 #SBATCH --mail-user=fallah
 source namelist.txt
-set -ex
+set -e
 member=3
 res="0.5"
 
@@ -62,7 +64,7 @@ fi
 # tasrange = tasmax − tasmin and tasskew = (tas − tasmin)/(tasmax − tasmin)
 # ------------------ obs -------------------: 
 # tasrang: 
-if [ $var == "tasrange" ] && [ $scenario == "ssp126" ] && [ $mod == "gfdl-esm4" ] && [ $time_slice == "historical" ]
+if [ $var == "tasrange" ] && [ $scenario == "ssp126" ] && [ $model == "gfdl-esm4" ] && [ $time_slice == "historical" ]
 then 
 echo "doing the tasrange and tasskew making of obs"
 for resel in ${res0} ${res1} ${res2} ${res3} ${res4} ${res5}

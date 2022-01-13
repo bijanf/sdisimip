@@ -22,11 +22,26 @@ do
                 echo 
                 echo "sending the job to slurm !"
                 sbatch bias_adjust.sh $var $scenario $model $time_slice 
-                echo "waiting 120 seconds to send the next job! "
-                echo "-----------------------------------------------------"
+                
                 echo " "
                 echo " "
-                sleep 120
+                if [ $var == "tasrange" ] && [ $scenario == "ssp126" ] && [ $model == "gfdl-esm4" ] && [ $time_slice == "historical" ]
+		then
+		    echo "waiting 240 seconds to send the next job! "
+                    echo "-----------------------------------------------------"
+                    echo " "
+                    echo " "
+
+		    sleep 240
+		else
+		    echo "waiting 150 seconds to send the next job! "
+                    echo "-----------------------------------------------------"
+                    echo " "
+                    echo " "
+
+    
+                    sleep 150
+		fi 
             done 
         done
     done
