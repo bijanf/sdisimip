@@ -20,7 +20,7 @@ do
 
     sed -i 's/inc      = -0.5/inc      = 0.5 /g' grid_0
     sed -i 's/inc      = 0.5/inc      = 0.5 /g' grid_0
-    sed -i "s%${lat22}%${lat11} %g" grid_0
+    sed -i "s%${lat2}%${lat1} %g" grid_0
     sed -i "s/size     = 4/size     = 4 /g" grid_0
     sed -i 's/gridsize  = 16/gridsize  = 16 /g' grid_0
     ######## start remapping:
@@ -108,15 +108,15 @@ do
 
             # cut the domain:
             ## train:
-            ncks -O -d lat,${lat11},${lat22} -d lon,${lon11},${lon22} ${file_train} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_train.nc
+            ncks -O -d lat,${lat1},${lat2} -d lon,${lon1},${lon2} ${file_train} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_train.nc
             ## historical: 
-            ncks -O -d lat,${lat11},${lat22} -d lon,${lon11},${lon22} ${file_historical} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_historical.nc
+            ncks -O -d lat,${lat1},${lat2} -d lon,${lon1},${lon2} ${file_historical} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_historical.nc
             ## near future:
-            ncks -O -d lat,${lat11},${lat22} -d lon,${lon11},${lon22} ${file_near_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_near_future.nc
+            ncks -O -d lat,${lat1},${lat2} -d lon,${lon1},${lon2} ${file_near_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_near_future.nc
             ## middle future:
-            ncks -O -d lat,${lat11},${lat22} -d lon,${lon11},${lon22} ${file_middle_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_middle_future.nc
+            ncks -O -d lat,${lat1},${lat2} -d lon,${lon1},${lon2} ${file_middle_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_middle_future.nc
             ## near future:
-            ncks -O -d lat,${lat11},${lat22} -d lon,${lon11},${lon22} ${file_far_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_far_future.nc
+            ncks -O -d lat,${lat1},${lat2} -d lon,${lon1},${lon2} ${file_far_future} ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_far_future.nc
 
             # create the grid information for remapping 
             
@@ -126,7 +126,7 @@ do
 
 
             sed -i 's/-0.5/0.5/g' grid_0
-            sed -i "s%${lat22}%${lat11}%g" grid_0
+            sed -i "s%${lat2}%${lat1}%g" grid_0
 
             ### remapping and correcting the grides
             for mmm in train historical near_future middle_future far_future

@@ -41,13 +41,9 @@ member=4 # just for labeling the ensemble-members if needed
 #############            yfirst    = 89.75
 #############            yinc      = -0.5
 ######################################################
-
-lat11=38.25
-lat22=39.75
-lon11=66.25
-lon22=67.75
-
+# directory for writing the merged preprocessing files:
 data_dir="/p/projects/gvca/bijan/Samarkhand/data/merged/"
+# directory for writing the output files:
 out_dir="/p/projects/gvca/bijan/Samarkhand/out/"
 
 

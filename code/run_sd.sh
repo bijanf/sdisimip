@@ -22,11 +22,11 @@ do
                 echo 
                 echo "sending the job to slurm !"
                 sbatch sd.sh $var $scenario $model $time_slice 
-                echo "waiting 60 seconds to send the next job! "
+                echo "waiting 120 seconds to send the next job! "
                 echo "-----------------------------------------------------"
                 echo " "
                 echo " "
-                sleep 60
+                sleep 360
             done 
         done
     done
