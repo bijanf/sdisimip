@@ -21,6 +21,6 @@ The workflow right now is as following:
 
 <object data="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf"  type="application/pdf" width="700px" height="700px">
     <embed src="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf">Download PDF</a>.</p>
+        <p> Download the PDF to view it: <a href="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf">Download PDF</a>.</p>
     </embed>
 </object>
