@@ -10,9 +10,9 @@ The workflow right now is as following:
 
 3- run the create_obs_coarse.sh to prepare the lowe resolution obs for step by step downscaling and for bias adjusting the ISIMIP3b against the CHELSA at 0.5 degree resolution prior to downscaling. 
 
-3- run the run_bias_adjust.sh to send bias adjusting parallel jobs for different variables, scenarios, models and time-slices. 
+3- run the run_bias_adjust.sh to send bias adjusting parallel jobs for different variables, scenarios, models and time-slices. Remember to change the SBATCH commands according to your own user info. 
 
-4- edit the downscaling step (1,2,3,4,5) in the sd.sh and run the run_sd.sh to send jobs to  slurm for different variables, scenarios,	models and time-slices. 
+4- edit the downscaling step (1,2,3,4,5) in the sd.sh and run the run_sd.sh to send jobs to  slurm for different variables, scenarios,	models and time-slices. Remember to change the SBATCH commands according to your own user info.
 
 5- run_post_process_products.sh to cut final time-slices and convert tasrange, tasskew and tas to tasmin and tasmax. 
 
