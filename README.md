@@ -16,3 +16,10 @@ The workflow right now is as following:
 
 5- run_post_process_products.sh to cut final time-slices and convert tasrange, tasskew and tas to tasmin and tasmax. 
 
+
+## Example of a run: 
+
+<object data="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf"  type="application/pdf" width="<embed src="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://www.pik-potsdam.de/~fallah/presentations/CHELSA/bijan_fallah_20220118.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
