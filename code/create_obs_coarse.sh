@@ -96,7 +96,9 @@ do
             # just the historical period is slightly different
 
             cdo -selyear,1979/2014 f.nc ${file_train}
-            cdo -selyear,1985/2020 f.nc ${file_historical}
+            ## cdo -selyear,1985/2020 f.nc ${file_historical}
+	    #  to avoid overfitting we select the historical period out of the training period: 
+	    cdo -selyear,1958/1993 f.nc ${file_historical}
             cdo -selyear,2015/2050 f.nc ${file_near_future}
             cdo -selyear,2040/2075 f.nc ${file_middle_future}
             cdo -selyear,2065/2100 f.nc ${file_far_future}
