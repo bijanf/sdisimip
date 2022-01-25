@@ -77,8 +77,9 @@ do
 
             file_train=${data_dir}${model}_${realization}_w5e5_${scenario}_${var}_global_daily_${latlon}_cut_mergetime_1979_2014.nc
 
-            # historical 1985-2020 keeping the 1990-2014
-            file_historical=${data_dir}${model}_${realization}_w5e5_${scenario}_${var}_global_daily_${latlon}_cut_mergetime_1985_2020.nc
+            # historical 1958-1993 to avoid over fitting!
+	    file_historical=${data_dir}${model}_${realization}_w5e5_${scenario}_${var}_global_daily_${latlon}_cut_mergetime_1958_1993.nc
+            #file_historical=${data_dir}${model}_${realization}_w5e5_${scenario}_${var}_global_daily_${latlon}_cut_mergetime_1985_2020.nc
 
             # near future 2015-2050 keeping 2015-2043
             file_near_future=${data_dir}${model}_${realization}_w5e5_${scenario}_${var}_global_daily_${latlon}_cut_mergetime_2015_2050.nc
