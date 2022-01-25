@@ -21,12 +21,12 @@ res4=0.023809523809523808
 res5=0.011811023622047244
 
 ###############################
+source namelist.txt
 var=$1
 scenario=$2
 model=$3
-#latlon="lat44.5_46.5_lon5._7."
-latlon="lat38.25_39.75_lon66.25_67.75"
-steps="3"
+latlon=lat${lat0}_${lat1}_lon${lon0}_${lon1}
+steps="1"
 time_slice=$4
 data_dir="../../out/"
 sd_python_code="../isimip3basd/statistical_downscaling.py"
@@ -132,7 +132,7 @@ fi
 
 if [ "${var}" == "rsds" ]
 then
-python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v surface_downwelling_shortwave_flux_in_air --lower-bound 0 --lower-threshold 0.0001 --upper-bound 1 --upper-threshold 0.9999 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_from}.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc 
+python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v surface_downwelling_shortwave_flux_in_air --lower-bound 0 --lower-threshold 0.0001 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_from}.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc 
 
 fi
 
