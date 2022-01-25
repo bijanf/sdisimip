@@ -14,12 +14,12 @@
 #SBATCH --mail-user=fallah
 source namelist.txt
 set -e
-member=3
+member=4
 res="0.5"
 
 ##time_slice="historical"
 #out_dir="/p/projects/gvca/bijan/Mats/data/out/"
-out_dir="/p/projects/gvca/bijan/Samarkhand/out/"
+out_dir="/p/projects/gvca/bijan/Mats_02/out/"
 var=$1
 scenario=$2
 mod=$3
