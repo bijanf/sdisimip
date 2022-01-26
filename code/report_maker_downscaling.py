@@ -117,7 +117,7 @@ def plot_tasmax(time_slice,scenario,data,prefix,res, member,vmin,
 
     cmap = plt.cm.coolwarm # define the colormap
     bounds = np.linspace(vmin, vmax, N)
-    lon,lat,vari = read_nc("out.nc","./", "tas")
+    lon,lat,vari = read_nc("out.nc","./", "tasmax")
     # make a meshgrid matrix from lon and lat : 
     lons,lats = np.meshgrid(lon,lat)
     # set up a map
@@ -312,7 +312,7 @@ def plot_tasmin(time_slice,scenario,data,prefix,res, member,vmin,
 
     cmap = plt.cm.coolwarm # define the colormap
     bounds = np.linspace(vmin, vmax, N)
-    lon,lat,vari = read_nc("out.nc","./", "tas")
+    lon,lat,vari = read_nc("out.nc","./", "tasmin")
     # make a meshgrid matrix from lon and lat : 
     lons,lats = np.meshgrid(lon,lat)
     # set up a map
