@@ -78,7 +78,7 @@ class PDF(FPDF):
 
 
 def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
- vmax,N,out, formats, ensoperator):
+ vmax,N,out, formats, ensoperator, timing):
     '''
     function to plot the ensmean and ensstd of the near surface air temperature
 
@@ -95,7 +95,7 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
         out:       string the directory where the plots have to be stored. 
         formats:    string, the format of the plots, e.g. pdf, png, etc.
         ensoperator: string, the operator for ensemble : ensmean or ensstd.
-
+        timing:    string, time-slice of the simulation. 
 
     - output: 
         Plots. 
@@ -106,7 +106,7 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
         files="*_w5e5_"+scenario+"_"+prefix+time_slice+".nc"
     else:
         data += "/GCMoutput_fine/"
-        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+".nc"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+timing+".nc"
     
     cmd = "cdo -O -"+ensoperator+" "+data+files+" out_1.nc"
     os.system(cmd)
@@ -169,7 +169,7 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
     plt.close()
 
 def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
- vmax,N,out, formats, ensoperator):
+ vmax,N,out, formats, ensoperator, timing):
     '''
     function to plot the ensmean and ensstd of the near surface air temperature
 
@@ -186,6 +186,7 @@ def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
         out:       string the directory where the plots have to be stored. 
         formats:    string, the format of the plots, e.g. pdf, png, etc.
         ensoperator: string, the operator for ensemble : ensmean or ensstd.
+        timing:    string, time-slice of the simulation. 
 
 
     - output: 
@@ -197,7 +198,7 @@ def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
         files="*_w5e5_"+scenario+"_"+prefix+time_slice+".nc"
     else:
         data += "/GCMoutput_fine/"
-        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+".nc"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+timing+".nc"
     
     cmd = "cdo -O -"+ensoperator+" "+data+files+" out_1.nc"
     os.system(cmd)
@@ -268,7 +269,7 @@ def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
 
 
 def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
- vmax,N,out, formats, ensoperator):
+ vmax,N,out, formats, ensoperator, timing):
     '''
     function to plot the ensmean and ensstd of the near surface air temperature
 
@@ -285,6 +286,7 @@ def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
         out:       string the directory where the plots have to be stored. 
         formats:    string, the format of the plots, e.g. pdf, png, etc.
         ensoperator: string, the operator for ensemble : ensmean or ensstd.
+        timing:    string, time-slice of the simulation. 
 
 
     - output: 
@@ -296,7 +298,7 @@ def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
         files="*_w5e5_"+scenario+"_"+prefix+time_slice+".nc"
     else:
         data += "/GCMoutput_fine/"
-        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+".nc"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+timing+".nc"
     
     cmd = "cdo -O -"+ensoperator+" "+data+files+" out_1.nc"
     os.system(cmd)
@@ -385,7 +387,15 @@ data = "/p/projects/gvca/bijan/Mats_02/out/"
 pdf = PDF()
 for time_slice in ["near_future",'middle_future','far_future']:
 #for time_slice in ['far_future']:
-
+    if (time_slice == "near_future") & (res !="0.5") :
+        timing = "_2015_2044"
+    elif (time_slice == "middle_future") & (res !="0.5") : 
+        timing = "_2045_2069"
+    elif (time_slice == "far_future") & (res !="0.5") :
+        timing = "_2070_2099"
+    elif (res =="0.5") :
+        timing = ""
+    
 
     for scenario in ["ssp126","ssp370","ssp585"]:
 #    for scenario in ["ssp126"]:
@@ -396,7 +406,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
                   
         plot_rsds(time_slice=time_slice,scenario=scenario,data=data,prefix="rsds_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=100, vmax=300,N=21,out="./plots/", formats="png",
-        ensoperator="ensmean")
+        ensoperator="ensmean", timing=timing)
 
         for elem in [["plots/rsds_"+scenario+"_"+time_slice+"_"+res+"_ensmean.png",
         "plots/rsds_"+scenario+"_"+time_slice+"_"+res+"_ensmean_colorbar.png"]]:
@@ -405,7 +415,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
 
         plot_rsds(time_slice=time_slice,scenario=scenario,data=data,prefix="rsds_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=25, vmax=50,N=26,out="./plots/", formats="png",
-        ensoperator="ensstd")
+        ensoperator="ensstd", timing=timing)
         for elem in [["plots/rsds_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/rsds_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
             pdf.print_page(elem)
@@ -415,7 +425,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
         plot_tas(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tas_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=270, vmax=300,N=31,out="./plots/", formats="png",
-        ensoperator="ensmean")
+        ensoperator="ensmean", timing=timing)
         for elem in [["plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensmean.png",
         "plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensmean_colorbar.png"]]:
             pdf.print_page(elem)
@@ -424,7 +434,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
         plot_tas(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tas_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
-        ensoperator="ensstd")
+        ensoperator="ensstd", timing=timing)
         for elem in [["plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
             pdf.print_page(elem)
@@ -435,7 +445,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
         plot_pr(time_slice=time_slice,scenario=scenario,data=data,
         prefix="pr_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=0, vmax=10,N=21,out="./plots/", formats="png",
-        ensoperator="ensmean")
+        ensoperator="ensmean", timing=timing)
         for elem in [["plots/pr_"+scenario+"_"+time_slice+"_"+res+"_ensmean.png",
         "plots/pr_"+scenario+"_"+time_slice+"_"+res+"_ensmean_colorbar.png"]]:
             pdf.print_page(elem)
@@ -443,7 +453,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
         plot_pr(time_slice=time_slice,scenario=scenario,data=data,
         prefix="pr_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=3, vmax=6,N=31,out="./plots/", formats="png",
-        ensoperator="ensstd")
+        ensoperator="ensstd", timing=timing)
         for elem in [["plots/pr_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/pr_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
             pdf.print_page(elem)
