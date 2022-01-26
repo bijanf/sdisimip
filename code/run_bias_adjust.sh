@@ -1,7 +1,9 @@
 #!bin/bash 
 set -e
 
-for var in "tasrange" "tasskew" "rsds" "tas" "pr"
+###for var in "tasrange" "tasskew" "rsds" "tas" "pr"
+#for var in "rsds" "tas" "pr"
+for var in "tasskew"
 do 
 
     for scenario in "ssp126" "ssp370" "ssp585"
@@ -34,13 +36,13 @@ do
 
 		    sleep 240
 		else
-		    echo "waiting 150 seconds to send the next job! "
+		    echo "waiting 120 seconds to send the next job! "
                     echo "-----------------------------------------------------"
                     echo " "
                     echo " "
 
     
-                    sleep 150
+                    sleep 120
 		fi 
             done 
         done
