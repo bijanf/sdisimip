@@ -156,7 +156,7 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
     
     #plt.colorbar()
     # Save the plot:
-    plt.savefig(out+"tas_"+scenario+"_"+timing+"_"+res+"_"+ensoperator+'.'+formats,dpi=300,bbox_inches='tight')
+    plt.savefig(out+"tas_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+'.'+formats,dpi=300,bbox_inches='tight')
     cmd = "rm out_1.nc out.nc"
     os.system(cmd)
     #plt.show()
@@ -165,7 +165,7 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
     cbar_ax = fig.add_axes([0.17, 0.17, 0.60, 0.04])
     cbar = fig.colorbar(plot_1, cax=cbar_ax, orientation="horizontal", extend="both")
     cbar.ax.set_xlabel('Temperature [K]')
-    plt.savefig(out+"tas_"+scenario+"_"+timing+"_"+res+"_"+ensoperator+"_colorbar.png",dpi=300,bbox_inches='tight')
+    plt.savefig(out+"tas_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+"_colorbar.png",dpi=300,bbox_inches='tight')
     plt.close()
 
 def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
