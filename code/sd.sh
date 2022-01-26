@@ -4,7 +4,7 @@
 #SBATCH --qos=short
 ##SBATCH --partition=priority
 #SBATCH --partition=largemem
-#SBATCH --job-name=sd01_3
+#SBATCH --job-name=sdmats02
 #SBATCH --nodes=1 
 #SBATCH --cpus-per-task=16
 #SBATCH --output=../../data/%j.out 
@@ -13,7 +13,7 @@
 #SBATCH --mail-user=fallah
 ########################## NAMELIST ###################################
 set -ex 
-member=3
+member=4
 res1=0.21428571428571427
 res2=0.1
 res3=0.04838709677419355
@@ -92,7 +92,7 @@ fi
 if [ "${var}" == "rsds" ]
 then 
 
-python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v surface_downwelling_shortwave_flux_in_air --lower-bound 0 --lower-threshold 0.0001 --upper-bound 1 --upper-threshold 0.9999 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
+python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v surface_downwelling_shortwave_flux_in_air --lower-bound 0 --lower-threshold 0.0001 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
 
 fi 
 
@@ -106,7 +106,7 @@ fi
 if [ "${var}" == "tasskew" ]
 then 
 
-python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v air_temperature --lower-bound 0 --lower-threshold .0001 --upper-bound 1 --upper-threshold 0.9999 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
+python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v air_temperature --lower-bound 0 --lower-threshold .0001 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
 
 fi
 
