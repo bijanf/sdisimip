@@ -77,6 +77,104 @@ class PDF(FPDF):
         self.page_body(images)
 
 
+
+
+def plot_tasmax(time_slice,scenario,data,prefix,res, member,vmin,
+ vmax,N,out, formats, ensoperator, timing):
+    '''
+    function to plot the ensmean and ensstd of the near surface air temperature
+
+    - input: 
+        tim_slice: string, time_slice of the simulations. 
+        scenario:  string, scenario of the simulations. 
+        data:      string, the directory of the data. 
+        prefix:    string, prefix of the data name.
+        res:       string, the resolution of the output data. 
+        member:    string, the experiment number. 
+        vmin:      float,  minimum value for the pcolor.
+        vmax:      float,  maximum value for the pcolor.
+        N:         integer, number of colors.    
+        out:       string the directory where the plots have to be stored. 
+        formats:    string, the format of the plots, e.g. pdf, png, etc.
+        ensoperator: string, the operator for ensemble : ensmean or ensstd.
+        timing:    string, time-slice of the simulation. 
+
+    - output: 
+        Plots. 
+    '''
+
+    if res == "0.5":
+        data += "/GCMinput_coarse/"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+".nc"
+    else:
+        data += "/GCMoutput_fine/"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+timing+".nc"
+    
+    cmd = "cdo -O -"+ensoperator+" "+data+files+" out_1.nc"
+    os.system(cmd)
+    cmd = "cdo -O timmean out_1.nc out.nc"
+    os.system(cmd)
+
+    cmap = plt.cm.coolwarm # define the colormap
+    bounds = np.linspace(vmin, vmax, N)
+    lon,lat,vari = read_nc("out.nc","./", "tas")
+    # make a meshgrid matrix from lon and lat : 
+    lons,lats = np.meshgrid(lon,lat)
+    # set up a map
+    fig = plt.figure()
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    # extract all colors from the .jet map
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    # create the new map
+    cmap = mpl.colors.LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+    # plot the data:
+    plot_1 = plt.pcolormesh(lons, lats,vari.squeeze() ,transform=ccrs.PlateCarree(),vmin=vmin,vmax=vmax,cmap=cmap, norm=norm,linewidth=0,rasterized=True)
+    plot_1.set_edgecolor('face')
+    # add coastlines:
+    ax.coastlines()
+    # add some features:
+    
+    #coastline = cfeature.COASTLINE
+    borders = cfeature.BORDERS
+    #ax.add_feature(borders)
+    #lakes = cfeature.LAKES
+    #rivers = cfeature.RIVERS
+    #ax.add_feature(rivers)
+    # add grids:
+    gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=0.33, color='k',alpha=0.5)
+    gl.xlabels_top = False
+    gl.ylabels_right = False
+    lat0=lat.min() # south lat
+    lat1=lat.max() # north lat 
+    lon0=lon.min() # west lon
+    lon1=lon.max() # east lon
+
+    gl.xlocator = mticker.FixedLocator(np.linspace(lon0,lon1,4))
+    gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
+
+
+    plt.title("tasmax "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    
+    #plt.colorbar()
+    # Save the plot:
+    plt.savefig(out+"tasmax_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+'.'+formats,dpi=300,bbox_inches='tight')
+    cmd = "rm out_1.nc out.nc"
+    os.system(cmd)
+    #plt.show()
+    plt.close()
+    fig = plt.figure()
+    cbar_ax = fig.add_axes([0.17, 0.17, 0.60, 0.04])
+    cbar = fig.colorbar(plot_1, cax=cbar_ax, orientation="horizontal", extend="both")
+    cbar.ax.set_xlabel('Temperature [K]')
+    plt.savefig(out+"tasmax_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+"_colorbar.png",dpi=300,bbox_inches='tight')
+    plt.close()
+
+
+
+
+
+
 def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
  vmax,N,out, formats, ensoperator, timing):
     '''
@@ -167,6 +265,107 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
     cbar.ax.set_xlabel('Temperature [K]')
     plt.savefig(out+"tas_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+"_colorbar.png",dpi=300,bbox_inches='tight')
     plt.close()
+
+
+
+
+
+
+
+
+
+def plot_tasmin(time_slice,scenario,data,prefix,res, member,vmin,
+ vmax,N,out, formats, ensoperator, timing):
+    '''
+    function to plot the ensmean and ensstd of the near surface air temperature
+
+    - input: 
+        tim_slice: string, time_slice of the simulations. 
+        scenario:  string, scenario of the simulations. 
+        data:      string, the directory of the data. 
+        prefix:    string, prefix of the data name.
+        res:       string, the resolution of the output data. 
+        member:    string, the experiment number. 
+        vmin:      float,  minimum value for the pcolor.
+        vmax:      float,  maximum value for the pcolor.
+        N:         integer, number of colors.    
+        out:       string the directory where the plots have to be stored. 
+        formats:    string, the format of the plots, e.g. pdf, png, etc.
+        ensoperator: string, the operator for ensemble : ensmean or ensstd.
+        timing:    string, time-slice of the simulation. 
+
+    - output: 
+        Plots. 
+    '''
+
+    if res == "0.5":
+        data += "/GCMinput_coarse/"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+".nc"
+    else:
+        data += "/GCMoutput_fine/"
+        files="*_w5e5_"+scenario+"_"+prefix+time_slice+"_BASD_"+member+"_"+res+timing+".nc"
+    
+    cmd = "cdo -O -"+ensoperator+" "+data+files+" out_1.nc"
+    os.system(cmd)
+    cmd = "cdo -O timmean out_1.nc out.nc"
+    os.system(cmd)
+
+    cmap = plt.cm.coolwarm # define the colormap
+    bounds = np.linspace(vmin, vmax, N)
+    lon,lat,vari = read_nc("out.nc","./", "tas")
+    # make a meshgrid matrix from lon and lat : 
+    lons,lats = np.meshgrid(lon,lat)
+    # set up a map
+    fig = plt.figure()
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    # extract all colors from the .jet map
+    cmaplist = [cmap(i) for i in range(cmap.N)]
+    # create the new map
+    cmap = mpl.colors.LinearSegmentedColormap.from_list('Custom cmap', cmaplist, cmap.N)
+    norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+    # plot the data:
+    plot_1 = plt.pcolormesh(lons, lats,vari.squeeze() ,transform=ccrs.PlateCarree(),vmin=vmin,vmax=vmax,cmap=cmap, norm=norm,linewidth=0,rasterized=True)
+    plot_1.set_edgecolor('face')
+    # add coastlines:
+    ax.coastlines()
+    # add some features:
+    
+    #coastline = cfeature.COASTLINE
+    borders = cfeature.BORDERS
+    #ax.add_feature(borders)
+    #lakes = cfeature.LAKES
+    #rivers = cfeature.RIVERS
+    #ax.add_feature(rivers)
+    # add grids:
+    gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=0.33, color='k',alpha=0.5)
+    gl.xlabels_top = False
+    gl.ylabels_right = False
+    lat0=lat.min() # south lat
+    lat1=lat.max() # north lat 
+    lon0=lon.min() # west lon
+    lon1=lon.max() # east lon
+
+    gl.xlocator = mticker.FixedLocator(np.linspace(lon0,lon1,4))
+    gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
+
+
+    plt.title("tasmin "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    
+    #plt.colorbar()
+    # Save the plot:
+    plt.savefig(out+"tasmin_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+'.'+formats,dpi=300,bbox_inches='tight')
+    cmd = "rm out_1.nc out.nc"
+    os.system(cmd)
+    #plt.show()
+    plt.close()
+    fig = plt.figure()
+    cbar_ax = fig.add_axes([0.17, 0.17, 0.60, 0.04])
+    cbar = fig.colorbar(plot_1, cax=cbar_ax, orientation="horizontal", extend="both")
+    cbar.ax.set_xlabel('Temperature [K]')
+    plt.savefig(out+"tasmin_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+"_colorbar.png",dpi=300,bbox_inches='tight')
+    plt.close()
+
+
 
 def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
  vmax,N,out, formats, ensoperator, timing):
@@ -385,8 +584,8 @@ data = "/p/projects/gvca/bijan/Mats_02/out/"
 
 
 pdf = PDF()
-for time_slice in ["near_future",'middle_future','far_future']:
-#for time_slice in ['far_future']:
+#for time_slice in ["near_future",'middle_future','far_future']:
+for time_slice in ['far_future']:
     if (time_slice == "near_future") & (res !="0.5") :
         timing = "_2015_2044"
     elif (time_slice == "middle_future") & (res !="0.5") : 
@@ -399,8 +598,8 @@ for time_slice in ["near_future",'middle_future','far_future']:
         timing = ""
     
 
-    for scenario in ["ssp126","ssp370","ssp585"]:
-#    for scenario in ["ssp126"]:
+#    for scenario in ["ssp126","ssp370","ssp585"]:
+    for scenario in ["ssp126"]:
 
 
 
@@ -441,8 +640,45 @@ for time_slice in ["near_future",'middle_future','far_future']:
         "plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
             pdf.print_page(elem)
 
-        
-        
+        # tasmin -------------------------------------------
+
+        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        prefix="tasmin_global_daily_cut_mergetime_member4_",
+        res=res, member="4",vmin=270, vmax=300,N=31,out="./plots/", formats="png",
+        ensoperator="ensmean", timing=timing)
+        for elem in [["plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensmean.png",
+        "plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensmean_colorbar.png"]]:
+            pdf.print_page(elem)
+
+
+        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        prefix="tasmin_global_daily_cut_mergetime_member4_",
+        res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
+        ensoperator="ensstd", timing=timing)
+        for elem in [["plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
+        "plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
+            pdf.print_page(elem)
+
+        # tasmax -------------------------------------------
+
+        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        prefix="tasmax_global_daily_cut_mergetime_member4_",
+        res=res, member="4",vmin=270, vmax=300,N=31,out="./plots/", formats="png",
+        ensoperator="ensmean", timing=timing)
+        for elem in [["plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensmean.png",
+        "plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensmean_colorbar.png"]]:
+            pdf.print_page(elem)
+
+
+        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        prefix="tasmax_global_daily_cut_mergetime_member4_",
+        res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
+        ensoperator="ensstd", timing=timing)
+        for elem in [["plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
+        "plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
+            pdf.print_page(elem)
+
+
         # pr ---------------------------------------------
         plot_pr(time_slice=time_slice,scenario=scenario,data=data,
         prefix="pr_global_daily_cut_mergetime_member4_",
@@ -463,4 +699,4 @@ for time_slice in ["near_future",'middle_future','far_future']:
 
 
  
-pdf.output('Repot'+res+'.pdf', 'F')
+pdf.output('Repot_res_'+res+'.pdf', 'F')
