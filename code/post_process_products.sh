@@ -6,9 +6,9 @@ res2=0.1
 res3=0.04838709677419355
 res4=0.023809523809523808
 res5=0.011811023622047244
-downscaling_to=$res2
-data_dir="/p/projects/gvca/bijan/Mats/data/out/"
-member="3"
+downscaling_to=$res1
+data_dir="/p/projects/gvca/bijan/Mats_02/out/"
+member="4"
 for var in "tasmin" "tasmax" "rsds" "tas" "pr"
 do 
     for scenario in "ssp126" "ssp370" "ssp585"
@@ -64,22 +64,23 @@ do
 
                 if [ $time_slice == "historical" ]
                 then 
-                    cdo -O selyear,1985/2014 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_1985_2014.nc
+
+                    cdo -O selyear,1960/1989 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_1960_1989.nc
                 fi
 
                 if [ $time_slice == "near_future" ]
                 then 
-                    cdo -O selyear,2015/2043 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2015_2043.nc
+                    cdo -O selyear,2015/2044 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2015_2044.nc
                 fi
 
                 if [ $time_slice == "middle_future" ]
                 then 
-                    cdo -O selyear,2044/2072 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2044_2072.nc
+                    cdo -O selyear,2045/2069 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2045_2069.nc
                 fi
 
                 if [ $time_slice == "far_future" ]
                 then 
-                    cdo -O selyear,2073/2100 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2073_2100.nc
+                    cdo -O selyear,2070/2099 ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}_2070_2099.nc
                 fi
             done
         done
