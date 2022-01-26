@@ -576,6 +576,7 @@ res="0.21428571428571427"
 #res="0.04838709677419355"
 #res="0.023809523809523808"
 data = "/p/projects/gvca/bijan/Mats_02/out/"
+os.system("mkdir -p ./plots")
 
 
 
@@ -642,7 +643,7 @@ for time_slice in ['far_future']:
 
         # tasmin -------------------------------------------
 
-        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        plot_tasmin(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmin_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=270, vmax=300,N=31,out="./plots/", formats="png",
         ensoperator="ensmean", timing=timing)
@@ -651,7 +652,7 @@ for time_slice in ['far_future']:
             pdf.print_page(elem)
 
 
-        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        plot_tasmin(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmin_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
         ensoperator="ensstd", timing=timing)
@@ -661,7 +662,7 @@ for time_slice in ['far_future']:
 
         # tasmax -------------------------------------------
 
-        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        plot_tasmax(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmax_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=270, vmax=300,N=31,out="./plots/", formats="png",
         ensoperator="ensmean", timing=timing)
@@ -670,7 +671,7 @@ for time_slice in ['far_future']:
             pdf.print_page(elem)
 
 
-        plot_tas(time_slice=time_slice,scenario=scenario,data=data,
+        plot_tasmax(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmax_global_daily_cut_mergetime_member4_",
         res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
         ensoperator="ensstd", timing=timing)
