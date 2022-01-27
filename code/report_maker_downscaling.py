@@ -154,7 +154,16 @@ def plot_tasmax(time_slice,scenario,data,prefix,res, member,vmin,
     gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
 
 
-    plt.title("tasmax "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    if (time_slice == "near_future") & (res =="0.5") :
+        tim = "_2015_2044"
+    elif (time_slice == "middle_future") & (res =="0.5") : 
+        tim = "_2045_2069"
+    elif (time_slice == "far_future") & (res =="0.5") :
+        tim = "_2070_2099"
+    if (res == "0.5" ):
+        plt.title("tasmax "+scenario+" "+tim+" "+res[0:5]+"° "+ensoperator)
+    else:
+        plt.title("tasmax "+scenario+" "+timing+" "+res[0:5]+"° "+ensoperator)
     
     #plt.colorbar()
     # Save the plot:
@@ -250,7 +259,16 @@ def plot_tas(time_slice,scenario,data,prefix,res, member,vmin,
     gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
 
 
-    plt.title("tas "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    if (time_slice == "near_future") & (res =="0.5") :
+        tim = "_2015_2044"
+    elif (time_slice == "middle_future") & (res =="0.5") : 
+        tim = "_2045_2069"
+    elif (time_slice == "far_future") & (res =="0.5") :
+        tim = "_2070_2099"
+    if (res == "0.5" ):
+        plt.title("tas "+scenario+" "+tim+" "+res[0:5]+"° "+ensoperator)
+    else:
+        plt.title("tas "+scenario+" "+timing+" "+res[0:5]+"° "+ensoperator)
     
     #plt.colorbar()
     # Save the plot:
@@ -349,7 +367,16 @@ def plot_tasmin(time_slice,scenario,data,prefix,res, member,vmin,
     gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
 
 
-    plt.title("tasmin "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    if (time_slice == "near_future") & (res =="0.5") :
+        tim = "_2015_2044"
+    elif (time_slice == "middle_future") & (res =="0.5") : 
+        tim = "_2045_2069"
+    elif (time_slice == "far_future") & (res =="0.5") :
+        tim = "_2070_2099"
+    if (res == "0.5" ):
+        plt.title("tasmin "+scenario+" "+tim+" "+res[0:5]+"° "+ensoperator)
+    else:
+        plt.title("tasmin "+scenario+" "+timing+" "+res[0:5]+"° "+ensoperator)
     
     #plt.colorbar()
     # Save the plot:
@@ -445,8 +472,16 @@ def plot_pr(time_slice,scenario,data,prefix,res, member,vmin,
     gl.xlocator = mticker.FixedLocator(np.linspace(lon0,lon1,4))
     gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
 
-
-    plt.title("pr "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    if (time_slice == "near_future") & (res =="0.5") :
+        tim = "_2015_2044"
+    elif (time_slice == "middle_future") & (res =="0.5") : 
+        tim = "_2045_2069"
+    elif (time_slice == "far_future") & (res =="0.5") :
+        tim = "_2070_2099"
+    if (res == "0.5" ):
+        plt.title("pr "+scenario+" "+tim+" "+res[0:5]+"° "+ensoperator)
+    else:
+        plt.title("pr "+scenario+" "+timing+" "+res[0:5]+"° "+ensoperator)
 
     #plt.colorbar()
     # Save the plot:
@@ -548,7 +583,16 @@ def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
     gl.ylocator = mticker.FixedLocator(np.linspace(lat0,lat1,4))
 
 
-    plt.title("rsds "+scenario+" "+timing+" "+res+"° "+ensoperator)
+    if (time_slice == "near_future") & (res =="0.5") :
+        tim = "_2015_2044"
+    elif (time_slice == "middle_future") & (res =="0.5") : 
+        tim = "_2045_2069"
+    elif (time_slice == "far_future") & (res =="0.5") :
+        tim = "_2070_2099"
+    if (res == "0.5" ):
+        plt.title("rsds "+scenario+" "+tim+" "+res[0:5]+"° "+ensoperator)
+    else:
+        plt.title("rsds "+scenario+" "+timing+" "+res[0:5]+"° "+ensoperator)
     #plt.colorbar()
     # Save the plot:
     plt.savefig(out+"rsds_"+scenario+"_"+time_slice+"_"+res+"_"+ensoperator+'.'+formats,dpi=300,bbox_inches='tight')
@@ -571,8 +615,8 @@ def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
 
 ##---------------- the namelist
 #res='0.5' # this is the original ISIMIP3b !!!
-#res="0.1"
-res="0.21428571428571427"
+res="0.1"
+#res="0.21428571428571427"
 #res="0.04838709677419355"
 #res="0.023809523809523808"
 data = "/p/projects/gvca/bijan/Mats_02/out/"
@@ -585,8 +629,8 @@ os.system("mkdir -p ./plots")
 
 
 pdf = PDF()
-#for time_slice in ["near_future",'middle_future','far_future']:
-for time_slice in ['far_future']:
+for time_slice in ["near_future",'middle_future','far_future']:
+#for time_slice in ['far_future']:
     if (time_slice == "near_future") & (res !="0.5") :
         timing = "_2015_2044"
     elif (time_slice == "middle_future") & (res !="0.5") : 
@@ -599,8 +643,8 @@ for time_slice in ['far_future']:
         timing = ""
     
 
-#    for scenario in ["ssp126","ssp370","ssp585"]:
-    for scenario in ["ssp126"]:
+    for scenario in ["ssp126","ssp370","ssp585"]:
+#    for scenario in ["ssp126"]:
 
 
 
@@ -635,7 +679,7 @@ for time_slice in ['far_future']:
 
         plot_tas(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tas_global_daily_cut_mergetime_member4_",
-        res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
+        res=res, member="4",vmin=2.5, vmax=5.5,N=31,out="./plots/", formats="png",
         ensoperator="ensstd", timing=timing)
         for elem in [["plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/tas_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
@@ -700,4 +744,4 @@ for time_slice in ['far_future']:
 
 
  
-pdf.output('Repot_res_'+res+'.pdf', 'F')
+pdf.output('Repot_res_'+res[0:5]+'.pdf', 'F')
