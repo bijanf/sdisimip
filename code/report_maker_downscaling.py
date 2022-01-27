@@ -4,6 +4,16 @@
 # The ensmeble members are the 5 ISIMIP3b models
 # The maps for all the 5 variables of the CHELSA
 # 
+
+
+
+
+
+
+
+
+
+
 #----------------- Import libraries: 
 from netCDF4 import Dataset
 import numpy as np
@@ -19,6 +29,26 @@ from fpdf import FPDF
 from matplotlib import rcParams
 rcParams['axes.spines.top'] = False
 rcParams['axes.spines.right'] = False
+
+
+
+
+
+
+
+##---------------- the namelist ------------------------------
+res='0.5' # this is the original ISIMIP3b !!!
+#res="0.1"
+#res="0.21428571428571427"
+#res="0.04838709677419355"
+#res="0.023809523809523808"
+data = "/p/projects/gvca/bijan/Mats_02/out/"
+os.system("mkdir -p ./plots")
+##----------------- end of the namelist-----------------------
+
+
+
+
 
 # ----------------- own functions & classes--------------------: 
 def read_nc(file,dir, var):
@@ -613,14 +643,6 @@ def plot_rsds(time_slice,scenario,data,prefix,res, member,vmin,
 
 
 
-##---------------- the namelist
-#res='0.5' # this is the original ISIMIP3b !!!
-res="0.1"
-#res="0.21428571428571427"
-#res="0.04838709677419355"
-#res="0.023809523809523808"
-data = "/p/projects/gvca/bijan/Mats_02/out/"
-os.system("mkdir -p ./plots")
 
 
 
@@ -698,7 +720,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
 
         plot_tasmin(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmin_global_daily_cut_mergetime_member4_",
-        res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
+        res=res, member="4",vmin=2.5, vmax=5.5,N=31,out="./plots/", formats="png",
         ensoperator="ensstd", timing=timing)
         for elem in [["plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/tasmin_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
@@ -717,7 +739,7 @@ for time_slice in ["near_future",'middle_future','far_future']:
 
         plot_tasmax(time_slice=time_slice,scenario=scenario,data=data,
         prefix="tasmax_global_daily_cut_mergetime_member4_",
-        res=res, member="4",vmin=2.5, vmax=3.5,N=21,out="./plots/", formats="png",
+        res=res, member="4",vmin=2.5, vmax=5.5,N=31,out="./plots/", formats="png",
         ensoperator="ensstd", timing=timing)
         for elem in [["plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensstd.png",
         "plots/tasmax_"+scenario+"_"+time_slice+"_"+res+"_ensstd_colorbar.png"]]:
