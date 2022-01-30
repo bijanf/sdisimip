@@ -11,6 +11,7 @@
 #SBATCH --account=swim
 #SBATCH --mail-type=FAIL                                                                     
 #SBATCH --mail-user=fallah
+
 ########################## NAMELIST ###################################
 set -ex 
 member=4
@@ -26,7 +27,7 @@ var=$1
 scenario=$2
 model=$3
 latlon=lat${lat0}_${lat1}_lon${lon0}_${lon1}
-steps="1"
+steps="3"
 time_slice=$4
 data_dir="../../out/"
 sd_python_code="../isimip3basd/statistical_downscaling.py"
@@ -106,7 +107,7 @@ fi
 if [ "${var}" == "tasskew" ]
 then 
 
-python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v air_temperature --lower-bound 0 --lower-threshold .0001 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
+python ${sd_python_code} --n-processes 16 --resume-job ${resume} --randomization-seed 0 -v air_temperature --lower-bound 0 --lower-threshold .0001 --upper-bound 1 --upper-threshold .9999 -o ${data_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${downscaling_to}.nc -s ${data_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc -f ${data_dir}GCMoutput_fine/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BASD_${member}_${downscaling_to}.nc
 
 fi
 
