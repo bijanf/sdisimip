@@ -35,7 +35,7 @@ do
                     echo " "
                     echo " "
 
-		    sleep 240
+		    sleep 10
 		else
 		    echo "waiting 120 seconds to send the next job! "
                     echo "-----------------------------------------------------"
@@ -43,7 +43,7 @@ do
                     echo " "
 
     
-                    sleep 120
+                    sleep 10
 		fi 
             done 
         done

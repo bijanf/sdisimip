@@ -21,7 +21,7 @@ source namelist.txt
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 echo "variables are "${variables[@]}
 ###################
-cutoff_do="no"
+cutoff_do="yes"
 mkdir -p ${out_dir_intermediate}
 if [ "${cutoff_do}"  == "yes" ]
 then 
@@ -57,7 +57,7 @@ do
                     echo "scenario is"$scen "and model i "$mod  "for year " $yy
                     echo 
                     mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
-                    if [ "$mod_lower" == "ukesm1-0-ll" ] | [ "$mod_lower" == "cnrm-cm6-1" ] | [ "$mod_lower" == "cnrm-esm2-1" ]
+                    if [ "$mod_lower" == "ukesm1-0-ll" ] || [ "$mod_lower" == "cnrm-cm6-1" ] || [ "$mod_lower" == "cnrm-esm2-1" ] 
                     then 
                        realization="r1i1p1f2"
                     else
@@ -112,7 +112,7 @@ do
 #    then 
 
         cdo -O -mergetime ${out_dir_intermediate}${header}${var}${suffix}*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc 
-###########        $(chunk_time_series ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
+#        $(chunk_time_series ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
 
 #    fi
 
@@ -127,7 +127,7 @@ do
         for mod in "${models[@]}"
         do    
             mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
-            if [ "$mod_lower" == "ukesm1-0-ll" ] | [ "$mod_lower" == "cnrm-cm6-1" ] | [ "$mod_lower" == "cnrm-esm2-1" ]
+            if [ "$mod_lower" == "ukesm1-0-ll" ] || [ "$mod_lower" == "cnrm-cm6-1" ] || [ "$mod_lower" == "cnrm-esm2-1" ]
             then 
                 realization="r1i1p1f2"
             else
@@ -136,8 +136,8 @@ do
 #            if [ ! -f ${out_dir_intermediate}/merged/${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]    
 #            then 
 
-                cdo -O -mergetime   ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
-############                $(chunk_time_series ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
+               cdo -O -mergetime   ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
+#                $(chunk_time_series ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
 #            fi
 
         done

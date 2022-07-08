@@ -21,6 +21,7 @@
 #SBATCH --output=slogs/my_job.%j.out
 
 
+module load nco
 
 set -e
 source namelist.txt
@@ -43,13 +44,13 @@ do
 
     sed -i 's/inc      = -0.5/inc      = 0.5 /g' grid_0
     sed -i 's/inc      = 0.5/inc      = 0.5 /g' grid_0
-    sed -i "s%${lat1}%${lat0} %g" grid_0
+    sed -i "s%${lat1}%${lat0}%g" grid_0
     sed -i "s/size     = 94/size     = 94 /g" grid_0
     sed -i "s/size     = 47/size     = 47 /g" grid_0
     sed -i 's/gridsize  = 4418/gridsize  = 4418 /g' grid_0
     
     ######## start remapping:
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapbil,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
     ##
     #### 0.25
     sed -i 's/= 0.5 /= 0.21428571428571427 /g' grid_0

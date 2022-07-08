@@ -7,10 +7,12 @@
 #SBATCH --time=00:30:00                                                                                                                                                                      
 #SBATCH --mail-type=FAIL                                                                                                                                                                     
 #SBATCH --account=bb1243                                                                                                                                                                     
-#SBATCH --output=slogs/my_job.%j.out 
+#SBATCH --output=slogs/my_job.%j.out
+#SBATCH --error=slogs/my_job.%j.err
 
 module load cdo 
-module load nco 
+module load nco
+source 0_export.sh
 source namelist.txt
 set -e
 member=4
@@ -27,16 +29,17 @@ time_slice=$4
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 mkdir -p ${out_dir}GCMoutput_coarse
 model=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
+echo $model
 if [ "$model" == "ukesm1-0-ll" ]
 then 
     realization="r1i1p1f2"
 else
     realization="r1i1p1f1"
 fi  
-
-if [ $var == "tas" ] || [ $var == "pr" ] || [ $var == "rsds" ]
+echo "----1"
+if [[ "$var" == "tas" ]] || [[ "$var" == "pr" ]] || [[ "$var" == "rsds" ]]
 then 
-
+echo "-----2"
 ncpdq -O --rdr=lon,lat,time ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}_1.nc
 mv ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}_1.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}.nc
 
@@ -57,7 +60,7 @@ fi
 
 
 
-if [ $var == "pr" ] 
+if [ "$var" == "pr" ] 
 then 
 
 
@@ -65,19 +68,25 @@ python ../isimip3basd/code/bias_adjustment.py --n-processes 16 --step-size 1 --r
 
 fi 
 
-if [ $var == "tas" ] 
+if [ "$var" == "tas" ] 
 then 
 python ../isimip3basd/code/bias_adjustment.py --n-processes 16 --step-size 1 --randomization-seed 0 -v tas --distribution normal -t additive -d 1 -w 0 -o ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}.nc -s ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_train.nc -f ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}.nc -b ${out_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc
 
 fi 
 
-if [ $var == "rsds" ] 
+if [ "$var" == "rsds" ] 
 then 
 python ../isimip3basd/code/bias_adjustment.py --n-processes 16 --step-size 1 --randomization-seed 0 -v rsds --lower-bound 0 --lower-threshold 0.0001 --upper-bound 1 --upper-threshold 0.9999 -t bounded -w 15 -o ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}.nc -s ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_train.nc -f ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}.nc -b ${out_dir}GCMoutput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_${time_slice}_BA.nc
 
 fi 
 
+# shall I do the tasmin tasrange for test?
+# turn on when doing the real stuff, it is just for the test!!!!!!!!!!!!!!!!!!!!!!!!!
+tasmintasrange=False
 
+if [ $tasmintasrange == "True" ]
+then
+    
 ########################################
 ### Implement the tasrange & tasskew:### 
 ########################################
@@ -90,7 +99,7 @@ fi
 # tasrang: 
 #if [ $var == "tasrange" ] && [ $scenario == "ssp126" ] && [ $model == "gfdl-esm4" ] && [ $time_slice == "historical" ]
 
-if [ $var == "tas" ] && [ $scenario == "ssp126" ] && [ $model == "canesm5" ] && [ $time_slice == "historical" ]
+if [ "$var" == "tas" ] && [ "$scenario" == "ssp126" ] && [ "$model" == "canesm5" ] && [ "$time_slice" == "historical" ]
 then 
 
 echo "------------doing the tasrange and tasskew making of obs-----------"
@@ -98,7 +107,7 @@ echo "------------doing the tasrange and tasskew making of obs-----------"
 for resel in ${res0} ${res1} ${res2} ${res3} ${res4} ${res5}
 do 
 
-if [ $var == "tasrange" ] 
+if [ "$var" == "tasrange" ] 
 then 
 
 cdo -O sub ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasmax_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasmin_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc  ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_tasrange_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${resel}.nc
@@ -130,14 +139,16 @@ done
 
 fi 
 
+fi #########tasmintasrange=False
+
 
 # ----------------- models -------------------
 # train: 
-if [ $var == "tasrange" ] 
+if [ "$var" == "tasrange" ] 
 then 
 cdo -O -chname,tasmax,tasrange -sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmax_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_train.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_train.nc 
 fi 
-if [ $var == "tasskew" ] 
+if [ "$var" == "tasskew" ] 
 then 
 
 if [ ! -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ]; then
@@ -153,12 +164,12 @@ rm -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc
 fi 
 
 # time_slice:
-if [ $var == "tasrange" ] 
+if [ "$var" == "tasrange" ] 
 then 
 cdo -O -chname,tasmax,tasrange -sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmax_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasrange_global_daily_cut_mergetime_member${member}_${time_slice}.nc 
 fi 
 
-if [ $var == "tasskew" ] 
+if [ "$var" == "tasskew" ] 
 then 
 if [ ! -f tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc ]; then
 cdo -O sub ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tas_global_daily_cut_mergetime_member${member}_${time_slice}.nc ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_tasmin_global_daily_cut_mergetime_member${member}_${time_slice}.nc tas_interim_${resel}_tasskew_${scenario}_${mod}_${time_slice}.nc 
@@ -175,7 +186,7 @@ fi
 ###############
 
 
-if [ $var == "tasskew" ] || [ $var == "tasrange" ] 
+if [ "$var" == "tasskew" ] || [ $var == "tasrange" ] 
 then
 
 ncpdq -O  --rdr=lon,lat,time ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}.nc ${out_dir}OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime1979_2014_${res}_1.nc
@@ -217,3 +228,4 @@ python ../isimip3basd/code/bias_adjustment.py --n-processes 16 --step-size 1 --r
 
 fi
 
+echo "---------------------F I N I S H E D-----------------------------------"
