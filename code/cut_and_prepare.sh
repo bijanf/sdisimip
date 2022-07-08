@@ -21,7 +21,7 @@ source namelist.txt
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 echo "variables are "${variables[@]}
 ###################
-cutoff_do="yes"
+cutoff_do="no"
 mkdir -p ${out_dir_intermediate}
 if [ "${cutoff_do}"  == "yes" ]
 then 
@@ -36,7 +36,7 @@ do
         for mon in {01..12}
         do 
             echo "The month is "$mon
-          #  ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir_intermediate}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
+            ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir_intermediate}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
 
         done
     done
@@ -107,6 +107,7 @@ then
 ## observations
 for var in "${variables[@]}"
 do 
+   echo "------------__"
 #    if [ ! -f ${out_dir_intermediate}/merged/${header}${var}${suffix}_cutoff_lat${lat0}${lat1}_lon${lon0}_${lon1}mergetime.nc ]
 #    then 
 
@@ -150,3 +151,4 @@ fi
 mkdir -p ${out_dir_intermediate}/merged
 mv ${out_dir_intermediate}/*mergetime.nc ${out_dir_intermediate}/merged/
 rm ${out_dir_intermediate}/*.nc
+echo "FINISHED-------------------------"

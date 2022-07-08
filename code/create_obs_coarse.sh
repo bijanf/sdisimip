@@ -1,4 +1,14 @@
 #!/bin/bash 
+#SBATCH --qos=short
+#SBATCH --partition=standard
+#SBATCH --account=gvca
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=6
+#SBATCH --job-name=gvcabasd
+#SBATCH --output=slogs/out.%j
+#SBATCH --error=slogs/out.%j
+
+
 set -ex
 source namelist.txt
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
@@ -14,7 +24,7 @@ do
     mkdir -p ${out_dir}OBSinput_coarse
     #####################
     # create the grid information for remapping from a model  
-    cdo -O griddes ../../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
+    cdo -O griddes data/merged/canesm5_r1i1p1f1_w5e5_ssp585_tas_global_daily_${latlon}_cut_mergetime.nc > grid_0
     #cdo -O griddes ${out_dir}GCMinput_coarse/gfdl-esm4_r1i1p1f1_w5e5_ssp585_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
 
 
@@ -24,39 +34,43 @@ do
     sed -i "s/size     = 4/size     = 4 /g" grid_0
     sed -i 's/gridsize  = 16/gridsize  = 16 /g' grid_0
     ######## start remapping:
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
     ##
     #### 0.25
     sed -i 's/= 0.5 /= 0.21428571428571427 /g' grid_0
     sed -i "s/= 4 /= 8 /g" grid_0
     sed -i 's/= 16 /= 64 /g' grid_0
     ##
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
+
+
+#    echo generating remap weights for aggregation_factor $aggregation_factor ...
+#    cdo gencon,grid_0  remap_weights.nc 
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
     ##
     ##### 0.125
     sed -i 's/= 0.21428571428571427 /= 0.1 /g' grid_0
     sed -i "s/= 8 /= 16 /g" grid_0
     sed -i 's/= 64 /= 256 /g' grid_0
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res2}.nc
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res2}.nc
     #
-    ##### 0.0625
-    sed -i 's/= 0.1 /= 0.04838709677419355 /g' grid_0
-    sed -i "s/= 16 /= 32 /g" grid_0
-    sed -i 's/= 256 /= 1024 /g' grid_0
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res3}.nc
+#    ##### 0.0625
+#    sed -i 's/= 0.1 /= 0.04838709677419355 /g' grid_0
+#    sed -i "s/= 16 /= 32 /g" grid_0
+#    sed -i 's/= 256 /= 1024 /g' grid_0
+#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res3}.nc
     #
-    #### 0.03125
-    sed -i 's/= 0.04838709677419355 /= 0.023809523809523808 /g' grid_0
-    sed -i "s/= 32 /= 64 /g" grid_0
-    sed -i 's/= 1024 /= 4096 /g' grid_0
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res4}.nc
-    #
-    ##### semi final  
-    ##### 0.03125
-    sed -i 's/= 0.023809523809523808 /= 0.011811023622047244 /g' grid_0
-    sed -i "s/= 64 /= 128 /g" grid_0
-    sed -i 's/= 4096 /= 16384 /g' grid_0
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res5}.nc
+#    #### 0.03125
+#    sed -i 's/= 0.04838709677419355 /= 0.023809523809523808 /g' grid_0
+#    sed -i "s/= 32 /= 64 /g" grid_0
+#    sed -i 's/= 1024 /= 4096 /g' grid_0
+#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res4}.nc
+ #   #
+ #   ##### semi final  
+ #   ##### 0.03125
+ #   sed -i 's/= 0.023809523809523808 /= 0.011811023622047244 /g' grid_0
+ #   sed -i "s/= 64 /= 128 /g" grid_0
+ #   sed -i 's/= 4096 /= 16384 /g' grid_0
+ #   cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-#w5e5v1.0_obsclim_${var}_30arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res5}.nc
 
 
     for model in "${models[@]}"
@@ -123,7 +137,7 @@ do
 
             # create the grid information for remapping 
             
-            cdo -O griddes ../../data/merged/ukesm1-0-ll_r1i1p1f2_w5e5_ssp585_tasmin_global_daily_${latlon}_cut_mergetime.nc > grid_0
+            cdo -O griddes data/merged/canesm5_r1i1p1f1_w5e5_ssp585_tas_global_daily_${latlon}_cut_mergetime.nc > grid_0
 
             #cdo -O griddes ${out_dir}GCMinput_coarse/${model}_${realization}_w5e5_${scenario}_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
 
@@ -144,3 +158,6 @@ do
         done       # for scenario     
     done           # for model
 done               # for variable
+
+
+echo "---------------------------F I N I S H E D ---------------------"
