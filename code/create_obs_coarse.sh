@@ -1,15 +1,28 @@
 #!/bin/bash 
-#SBATCH --qos=short
-#SBATCH --partition=standard
-#SBATCH --account=gvca
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=6
-#SBATCH --job-name=gvcabasd
-#SBATCH --output=slogs/out.%j
-#SBATCH --error=slogs/out.%j
+##SBATCH --qos=short
+##SBATCH --qos=priority
+##SBATCH --partition=standard
+##SBATCH --partition=priority
+##SBATCH --account=gvca
+##SBATCH --ntasks=1
+##SBATCH --cpus-per-task=4
+##SBATCH --job-name=gvcabasd
+##SBATCH --output=slogs/out.%j
+##SBATCH --error=slogs/out.%j
+
+#SBATCH --job-name=BASD
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=128
+#SBATCH --exclusive
+#SBATCH --time=03:30:00
+#SBATCH --mail-type=FAIL
+#SBATCH --account=bb1243
+#SBATCH --output=slogs/my_job.%j.out
 
 
-set -ex
+
+set -e
 source namelist.txt
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 ####################################################
@@ -31,27 +44,30 @@ do
     sed -i 's/inc      = -0.5/inc      = 0.5 /g' grid_0
     sed -i 's/inc      = 0.5/inc      = 0.5 /g' grid_0
     sed -i "s%${lat1}%${lat0} %g" grid_0
-    sed -i "s/size     = 4/size     = 4 /g" grid_0
-    sed -i 's/gridsize  = 16/gridsize  = 16 /g' grid_0
+    sed -i "s/size     = 94/size     = 94 /g" grid_0
+    sed -i "s/size     = 47/size     = 47 /g" grid_0
+    sed -i 's/gridsize  = 4418/gridsize  = 4418 /g' grid_0
+    
     ######## start remapping:
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapbil,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
     ##
     #### 0.25
     sed -i 's/= 0.5 /= 0.21428571428571427 /g' grid_0
-    sed -i "s/= 4 /= 8 /g" grid_0
-    sed -i 's/= 16 /= 64 /g' grid_0
+    sed -i "s/= 94 /= 188 /g" grid_0
+    sed -i "s/= 47 /= 94 /g" grid_0
+    sed -i 's/= 4418 /= 17672 /g' grid_0
     ##
 
 
 #    echo generating remap weights for aggregation_factor $aggregation_factor ...
 #    cdo gencon,grid_0  remap_weights.nc 
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
-    ##
-    ##### 0.125
-    sed -i 's/= 0.21428571428571427 /= 0.1 /g' grid_0
-    sed -i "s/= 8 /= 16 /g" grid_0
-    sed -i 's/= 64 /= 256 /g' grid_0
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res2}.nc
+#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
+#    ##
+#    ##### 0.125
+#    sed -i 's/= 0.21428571428571427 /= 0.1 /g' grid_0
+#    sed -i "s/= 40 /= 80 /g" grid_0
+#    sed -i 's/= 1600 /= 6400 /g' grid_0
+#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res2}.nc
     #
 #    ##### 0.0625
 #    sed -i 's/= 0.1 /= 0.04838709677419355 /g' grid_0

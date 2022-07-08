@@ -112,7 +112,7 @@ do
 #    then 
 
         cdo -O -mergetime ${out_dir_intermediate}${header}${var}${suffix}*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc 
-        $(chunk_time_series ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
+###########        $(chunk_time_series ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
 
 #    fi
 
@@ -137,7 +137,7 @@ do
 #            then 
 
                 cdo -O -mergetime   ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
-                $(chunk_time_series ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
+############                $(chunk_time_series ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
 #            fi
 
         done
