@@ -3,7 +3,20 @@
 #code to prepare the obs_hist,sim_hist,sim_fut
 # and cut the domain for the Target
 #=============================================
+#SBATCH --qos=short
+#SBATCH --partition=standard
+#SBATCH --account=gvca
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=6
+#SBATCH --job-name=gvcabasd
+#SBATCH --output=slogs/out.%j
+#SBATCH --error=slogs/out.%j
+
+
+
+
 set -e
+source 0_export.sh
 source namelist.txt
 latlon="lat${lat0}_${lat1}_lon${lon0}_${lon1}"
 echo "variables are "${variables[@]}
@@ -23,7 +36,7 @@ do
         for mon in {01..12}
         do 
             echo "The month is "$mon
-            ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir_intermediate}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
+          #  ncks -O -d lat,${lat0},${lat1} -d lon,${lon0},${lon1} ${chelsa_dir}${header}${var}${suffix}${year}${mon}.nc ${out_dir_intermediate}${header}${var}${suffix}${year}${mon}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc
 
         done
     done
@@ -36,15 +49,15 @@ do
             if [ "$scen" == "historical" ]
             then 
 
-                for yy in 1850_1850 1851_1860 1861_1870 1871_1880 1881_1890 1891_1900 1901_1910 1911_1920 1921_1930 1931_1940 1941_1950 1951_1960 1961_1970 1971_1980 1981_1990 1991_2000 2001_2010 2011_2014
+                for yy in 1951_1960 1961_1970 1971_1980 1981_1990 1991_2000 2001_2010 2011_2014
                 do 
 
                     echo 
                     echo "----------cuttiung the scenarios---------------"
-                    echo "scenario is"$scen "and model i "$mod  
+                    echo "scenario is"$scen "and model i "$mod  "for year " $yy
                     echo 
                     mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
-                    if [ "$mod_lower" == "ukesm1-0-ll" ]
+                    if [ "$mod_lower" == "ukesm1-0-ll" ] | [ "$mod_lower" == "cnrm-cm6-1" ] | [ "$mod_lower" == "cnrm-esm2-1" ]
                     then 
                        realization="r1i1p1f2"
                     else
@@ -98,6 +111,8 @@ do
 #    then 
 
         cdo -O -mergetime ${out_dir_intermediate}${header}${var}${suffix}*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc 
+        $(chunk_time_series ${out_dir_intermediate}${header}${var}${suffix}_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
+
 #    fi
 
 done 
@@ -111,7 +126,7 @@ do
         for mod in "${models[@]}"
         do    
             mod_lower=$(echo "$mod" | tr '[:upper:]' '[:lower:]')
-            if [ "$mod_lower" == "ukesm1-0-ll" ]
+            if [ "$mod_lower" == "ukesm1-0-ll" ] | [ "$mod_lower" == "cnrm-cm6-1" ] | [ "$mod_lower" == "cnrm-esm2-1" ]
             then 
                 realization="r1i1p1f2"
             else
@@ -121,6 +136,7 @@ do
 #            then 
 
                 cdo -O -mergetime   ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_*_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut.nc ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc
+                $(chunk_time_series ${out_dir_intermediate}${mod_lower}_${realization}_w5e5_${scen}_${var}_global_daily_lat${lat0}_${lat1}_lon${lon0}_${lon1}_cut_mergetime.nc .rechunked "-C -v lon,lat,time,$var")
 #            fi
 
         done
