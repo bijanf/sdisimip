@@ -12,10 +12,10 @@
 #lon0=44.00
 #lon1=91.00
 
-lat0=56.25 #first lat
-lat1=56.75 #second lat
-lon0=44.25 #first lon
-lon1=44.75 #second lon
+lat0=0.75 #first lat
+lat1=10.25 #second lat
+lon0=101.25 #first lon
+lon1=110.75 #second lon
 
 
 # header of the chelsa

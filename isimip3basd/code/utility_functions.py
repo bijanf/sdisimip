@@ -1,4 +1,4 @@
-# (C) 2019 Potsdam Institute for Climate Impact Research (PIK)
+# (C) 2022 Potsdam Institute for Climate Impact Research (PIK)
 # 
 # This file is part of ISIMIP3BASD.
 #
@@ -36,7 +36,7 @@ import scipy.stats as sps
 import scipy.linalg as spl
 import scipy.interpolate as spi
 from pandas import Series
-from netCDF4 import Dataset
+from netCDF4 import Dataset, default_fillvals
 from cf_units import num2date
 from itertools import product
 from scipy.signal import convolve
@@ -486,8 +486,7 @@ def split(s, n=None, converter=str, empty=None, delimiter=','):
 
 def setup_output_nc(
         dst_path, src, var,
-        basd_options, basd_prefix='', basd_index=None,
-        fill_value=1.e20, src_fine=None):
+        basd_options, basd_prefix='', basd_index=None, src_fine=None):
     """
     Creates output netcdf file of bias adjustment or statistical downscaling.
     Copies information from src and (in the case of statistical downsacling)
@@ -512,9 +511,6 @@ def setup_output_nc(
     basd_index : int, optional
         If provided then only save the options relevant for the variable with
         the given index.
-    fill_value : float, optional
-        Value used to indicate missing values of data variable. All values of
-        the data variable in the output file will be set to this value.
     src_fine : Dataset, optional
         For statistical downscaling only; fine resolution dataset used to set
         spatial dimensions and coordinate variables of output file.
@@ -529,7 +525,7 @@ def setup_output_nc(
     with Dataset(dst_path, 'w') as dst:
         # copy global attributes, adding BASD attributes
         global_attributes = src.__dict__
-        global_attributes[basd_prefix+'version'] = 'ISIMIP3BASD v3.0.0'
+        global_attributes[basd_prefix+'version'] = 'ISIMIP3BASD v3.0.1'
         for key, value in basd_options.__dict__.items():
             if basd_index and key != 'months' and isinstance(value, str):
                 v = value.split(',')[basd_index] if ',' in value else value
@@ -544,8 +540,7 @@ def setup_output_nc(
             # copy spatial dimensions from src_fine
             if name in dim_fine:
                 dimension = src_fine.dimensions[name]
-            dst.createDimension(name,
-                (None if dimension.isunlimited() else len(dimension)))
+            dst.createDimension(name, len(dimension))
 
         # copy variables, including variable attributes
         for name, variable in src.variables.items():
@@ -553,21 +548,25 @@ def setup_output_nc(
             if dim_fine and (name == var or
                 all(d in dim_fine for d in variable.dimensions)):
                 variable = src_fine[name]
+            # determine fill value
+            variable_attributes = src[name].__dict__
+            fv = variable_attributes.pop('missing_value', None)
+            fv = variable_attributes.pop('_FillValue', fv)
+            if fv is None and name == var:
+                dts = variable.datatype.str[1:]
+                assert dts in default_fillvals, 'unable to set fill_value'
+                fv = default_fillvals[dts]
+            # determine chunking
             c = variable.chunking()
             if dim_fine and name == var and c != 'contiguous':
                 c[-1] = src[name].chunking()[-1]
+            # create variable
             dst.createVariable(name, variable.datatype, variable.dimensions,
-                chunksizes=None if c == 'contiguous' else c)
-            # attributes
-            dst[name].setncatts(src[name].__dict__)
-            # data
-            if name == var:
-                # cast fill_value to the right type
-                dst_fill_value = type(variable.datatype.type())(fill_value)
-                # do not set the data but set _FillValue
-                dst[name].setncattr('_FillValue', dst_fill_value)
-                # the result is an empty data array
-            else:
+                chunksizes=None if c == 'contiguous' else c, fill_value=fv)
+            # copy attributes except missing_value and _FillValue
+            dst[name].setncatts(variable_attributes)
+            # copy data for all coordinate variables
+            if name != var:
                 dst[name][:] = variable[:]
 
 

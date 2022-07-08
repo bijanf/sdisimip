@@ -1,4 +1,21 @@
-#!/bin/bash
+# (C) 2022 Potsdam Institute for Climate Impact Research (PIK)
+# 
+# This file is part of ISIMIP3BASD.
+#
+# ISIMIP3BASD is free software: you can redistribute it and/or modify it under
+# the terms of the GNU Affero General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ISIMIP3BASD is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with ISIMIP3BASD. If not, see <http://www.gnu.org/licenses/>.
+
+
 
 # do bias adjustment for all variables in one program call
 python -u bias_adjustment.py \
@@ -21,6 +38,8 @@ python -u bias_adjustment.py \
 -s ../data/hurs_sim-hist_coarse_1979-2014.nc,../data/pr_sim-hist_coarse_1979-2014.nc,../data/prsnratio_sim-hist_coarse_1979-2014.nc,../data/ps_sim-hist_coarse_1979-2014.nc,../data/rlds_sim-hist_coarse_1979-2014.nc,../data/rsds_sim-hist_coarse_1979-2014.nc,../data/sfcWind_sim-hist_coarse_1979-2014.nc,../data/tas_sim-hist_coarse_1979-2014.nc,../data/tasrange_sim-hist_coarse_1979-2014.nc,../data/tasskew_sim-hist_coarse_1979-2014.nc \
 -f ../data/hurs_sim-fut_coarse_2065-2100.nc,../data/pr_sim-fut_coarse_2065-2100.nc,../data/prsnratio_sim-fut_coarse_2065-2100.nc,../data/ps_sim-fut_coarse_2065-2100.nc,../data/rlds_sim-fut_coarse_2065-2100.nc,../data/rsds_sim-fut_coarse_2065-2100.nc,../data/sfcWind_sim-fut_coarse_2065-2100.nc,../data/tas_sim-fut_coarse_2065-2100.nc,../data/tasrange_sim-fut_coarse_2065-2100.nc,../data/tasskew_sim-fut_coarse_2065-2100.nc \
 -b ../data/hurs_sim-fut-basd_coarse_2065-2100.nc,../data/pr_sim-fut-basd_coarse_2065-2100.nc,../data/prsnratio_sim-fut-basd_coarse_2065-2100.nc,../data/ps_sim-fut-basd_coarse_2065-2100.nc,../data/rlds_sim-fut-basd_coarse_2065-2100.nc,../data/rsds_sim-fut-basd_coarse_2065-2100.nc,../data/sfcWind_sim-fut-basd_coarse_2065-2100.nc,../data/tas_sim-fut-basd_coarse_2065-2100.nc,../data/tasrange_sim-fut-basd_coarse_2065-2100.nc,../data/tasskew_sim-fut-basd_coarse_2065-2100.nc
+
+
 
 # do statistical downscaling for hurs
 python -u statistical_downscaling.py \

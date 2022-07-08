@@ -5,7 +5,7 @@
 ###
 ### parameters
 ###
-
+# chnaged the chunk size !!!!!!!
 
 
 export versionW5E5=2.0
@@ -391,7 +391,7 @@ function chunk_time_series {
   local n_times=$(ncks --trd -m -M $1 | grep -E -i ": time, size =" | cut -f 7 -d ' ' | uniq)
   # adjust chunking of nc files to improve lazy loadability by iris, see
   # <http://nco.sourceforge.net/nco.html#Chunking>
-  ncks -O $3 --cnk_csh=15000000000 --cnk_plc=g3d --cnk_dmn=time,$n_times --cnk_dmn=lat,5 --cnk_dmn=lon,5 $1 $1$2
+  ncks -O $3 --cnk_csh=15000000000 --cnk_plc=g3d --cnk_dmn=time,$n_times --cnk_dmn=lat,10 --cnk_dmn=lon,10 $1 $1$2
   local chunking_error=$?
   [ $chunking_error -eq 0 ] && mv $1$2 $1
   return $chunking_error

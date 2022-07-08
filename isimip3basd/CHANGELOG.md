@@ -1,3 +1,12 @@
+## v3.0.1 (2022-06-27)
+
+* Added the license header to the application example bash script and changed the following details of how the output NetCDF files are generated.
+* All dimensions of the output NetCDF files are now limited to prevent `IndexError: tuple index out of range`.
+* The fill value of the data variable of the output NetCDF files can no longer be set using the option `--fill-value` as this option has been removed. Instead, it is now copied from the input NetCDF files if available, otherwise a default fill value from the `netCDF4` package is used.
+* The fill value is now set when the data variable of the output NetCDF files is created instead of afterwards using `setncattr` as the old approach resulted in an `AttributeError` with some versions of the `netCDF4` package.
+
+
+
 ## v3.0.0 (2022-04-28)
 
 * Added application example that shows how the code is to be used and which parameter values were used for bias adjustment and statistical downscaling in ISIMIP3.

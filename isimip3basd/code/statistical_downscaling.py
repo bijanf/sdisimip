@@ -1,4 +1,4 @@
-# (C) 2019 Potsdam Institute for Climate Impact Research (PIK)
+# (C) 2022 Potsdam Institute for Climate Impact Research (PIK)
 # 
 # This file is part of ISIMIP3BASD.
 #
@@ -210,7 +210,7 @@ def downscale_one_month(
 def downscale_one_location(
         i_loc_coarse, variable,
         downscaling_factors, ascending, circular, sum_weights,
-        months=[1,2,3,4,5,6,7,8,9,10,11,12], fill_value=1.e20,
+        months=[1,2,3,4,5,6,7,8,9,10,11,12],
         lower_bound=None, lower_threshold=None,
         upper_bound=None, upper_threshold=None,
         if_all_invalid_use=np.nan, **kwargs):
@@ -235,8 +235,6 @@ def downscale_one_location(
     months : list, optional
         List of ints from {1,...,12} representing calendar months for which 
         results of statistical downscaling are to be returned.
-    fill_value : float, optional
-        Value used to indicate missing values.
     lower_bound : float, optional
         Lower bound of values in data.
     lower_threshold : float, optional
@@ -493,10 +491,6 @@ def main():
         help=('replace missing values, infs and nans by this value before '
               'statistical downscaling if there are no other values available '
               'in a time series (default: not specified)'))
-    parser.add_option('--fill-value', action='store',
-        type='float', dest='fill_value', default=1.e20,
-        help=('fill value used for missing values in output netcdf file '
-              '(default: 1.e20)'))
     parser.add_option('--repeat-warnings', action='store_true',
         dest='repeat_warnings', default=False,
         help='repeat warnings for the same source location (default: do not)')
@@ -542,7 +536,7 @@ def main():
 
         # create empty output netcdf file
         uf.setup_output_nc(options.sim_fine, sim_coarse, options.variable,
-            options, 'sd_', None, options.fill_value, obs_fine)
+            options, 'sd_', None, obs_fine)
 
     # compute grid cell weights at fine resolution
     sum_weights = uf.grid_cell_weights(coords)
@@ -566,7 +560,6 @@ def main():
         randomization_seed=options.randomization_seed,
         rotation_matrices=rotation_matrices,
         months=months,
-        fill_value=options.fill_value,
         lower_bound=options.lower_bound,
         lower_threshold=options.lower_threshold,
         upper_bound=options.upper_bound,
