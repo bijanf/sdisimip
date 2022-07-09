@@ -437,6 +437,7 @@ def analyze_input_grids(coords_coarse, coords_fine):
         y_delta = np.repeat(s, f) * np.tile(t - .5 * t[0], x.size)
         y_expected = np.repeat(x - .5 * s, f) + y_delta
         msg = f'expected coordinate issue in spatial dimension {i}'
+        print("-------------------y=",y,"-------------------y_expected=",y_expected)
         assert np.allclose(y, y_expected), msg
 
     return np.array(downscaling_factors), tuple(ascending), tuple(circular)

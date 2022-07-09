@@ -531,6 +531,7 @@ def main():
             space_shapes[key] = tuple(c.size for c in grids[key])
 
         # make sure the grids meet the requirements of the downscaling algorithm
+        print("-----------------------------",grids['sim_coarse'],grids['obs_fine'])
         downscaling_factors, ascending, circular = uf.analyze_input_grids(
             grids['sim_coarse'], grids['obs_fine'])
 

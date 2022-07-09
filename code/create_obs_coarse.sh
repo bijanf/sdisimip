@@ -39,7 +39,7 @@ do
     #####################
     # create the grid information for remapping from a model  
     cdo -O griddes data/merged/canesm5_r1i1p1f1_w5e5_ssp585_tas_global_daily_${latlon}_cut_mergetime.nc > grid_0
-    #cdo -O griddes ${out_dir}GCMinput_coarse/gfdl-esm4_r1i1p1f1_w5e5_ssp585_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
+#    #cdo -O griddes ${out_dir}GCMinput_coarse/gfdl-esm4_r1i1p1f1_w5e5_ssp585_${var}_global_daily_cut_mergetime_member${member}_near_future.nc > grid_0
 
 
     sed -i 's/inc      = -0.5/inc      = 0.5 /g' grid_0
@@ -50,19 +50,22 @@ do
     sed -i 's/gridsize  = 4418/gridsize  = 4418 /g' grid_0
     
     ######## start remapping:
-    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
+#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res0}.nc
     ##
     #### 0.25
-    sed -i 's/= 0.5 /= 0.21428571428571427 /g' grid_0
+    sed -i 's/= 0.5 /= 0.25 /g' grid_0
     sed -i "s/= 94 /= 188 /g" grid_0
     sed -i "s/= 47 /= 94 /g" grid_0
     sed -i 's/= 4418 /= 17672 /g' grid_0
+    sed -i "s/yfirst    = 33.25/yfirst    = 33.125 /g" grid_0
+    sed -i "s/xfirst    = 44.25/xfirst    = 44.125 /g" grid_0
     ##
 
 
 #    echo generating remap weights for aggregation_factor $aggregation_factor ...
 #    cdo gencon,grid_0  remap_weights.nc 
-#    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
+    cdo -O  selyear,${year1obs}/${year2obs}  -remapcon,grid_0 ${data_dir}chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime.nc  ${out_dir}/OBSinput_coarse/chelsa-w5e5v1.0_obsclim_${var}_${res_obs}arcsec_global_daily__${latlon}_cut_mergetime${year1obs}_${year2obs}_${res1}.nc
+    break
 #    ##
 #    ##### 0.125
 #    sed -i 's/= 0.21428571428571427 /= 0.1 /g' grid_0
